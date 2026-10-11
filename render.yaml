@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: futurefit-api
+    runtime: docker
+    plan: free
+    region: ohio
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        value: futurefit
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_HOST
+        fromService:
+          type: web
+          name: futurefit-web
+          property: host
+      - key: SEED_ON_STARTUP
+        value: true
+
+  - type: web
+    name: futurefit-web
+    runtime: static
+    plan: free
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_HOST
+        fromService:
+          type: web
+          name: futurefit-api
+          property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

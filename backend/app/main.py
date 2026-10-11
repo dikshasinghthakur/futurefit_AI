@@ -34,8 +34,12 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="FutureFit AI API", version="1.0.0", lifespan=lifespan, docs_url="/api/docs", openapi_url="/api/openapi.json")
 
 app.add_middleware(GZipMiddleware, minimum_size=1024)
+settings = get_settings()
+allowed_origins = settings.cors_origins.copy()
+if settings.frontend_host:
+    allowed_origins.append(f"https://{settings.frontend_host}")
 app.add_middleware(
-    CORSMiddleware, allow_origins=get_settings().cors_origins, allow_credentials=True,
+    CORSMiddleware, allow_origins=allowed_origins, allow_credentials=True,
     allow_methods=["*"], allow_headers=["*"],
 )
 

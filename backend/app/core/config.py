@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     refresh_token_days: int = 14
 
     cors_origins: list[str] = ["http://localhost:5173"]
+    frontend_host: str | None = None
     max_upload_mb: int = 5
     max_resumes_per_user: int = 25
 

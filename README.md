@@ -5,6 +5,23 @@ prerequisite-aware learning roadmap → track progress → feed completed skills
 
 **Stack:** React 18 + Vite · Framer Motion · Chart.js · FastAPI · MongoDB (Motor, async) · scikit-learn · optional LLM enrichment.
 
+## Deploy to Render
+
+The repository includes a Render Blueprint (`render.yaml`) for the static frontend and FastAPI backend. MongoDB is
+hosted separately on MongoDB Atlas:
+
+1. Create a MongoDB Atlas free (M0) cluster and a dedicated database user. Add `0.0.0.0/0` to the Atlas IP access
+   list so Render's dynamically assigned outbound IPs can connect; use a strong database password and keep the
+   connection string private.
+2. In Render, create a Blueprint from this GitHub repository. When prompted, provide the Atlas connection string
+   for `MONGO_URI`. Render generates a strong `JWT_SECRET` and wires the frontend/API hostnames automatically.
+3. Wait for both services to deploy. Open the `futurefit-web` service URL; the backend health check is
+   `/api/health`.
+
+The Blueprint uses Render's free service plan. Free web services can spin down when idle, so the first API request
+after inactivity may take longer. Set the GitHub repository's **Website** field to the `futurefit-web` URL to show
+the live app alongside its description.
+
 ## Run it
 
 ### Docker (everything)

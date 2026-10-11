@@ -1,4 +1,5 @@
-const BASE = import.meta.env.VITE_API_URL || '/api';
+const API_HOST = import.meta.env.VITE_API_HOST;
+const BASE = import.meta.env.VITE_API_URL || (API_HOST ? `https://${API_HOST}/api` : '/api');
 const ACCESS = 'ff_access';
 const REFRESH = 'ff_refresh';
 
